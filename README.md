@@ -12,9 +12,9 @@ This repository contains code for generating animations of 2D and 3D linear tran
 
 Here are some of the results, enjoy!!
 
-![](https://github.com/svelezg/linear_transforms/2D_animations/2D_animation.gif)
-![](https://github.com/svelezg/linear_transforms/2D_animations/2D_animation_90rotation.gif)
+![](https://github.com/svelezg/linear_transforms/blob/master/2D_animations/2D_animation.gif)
+![](https://github.com/svelezg/linear_transforms/blob/master2D_animations/2D_animation_90rotation.gif)
 
 
-![](https://github.com/svelezg/linear_transforms/3D_animations/3D_animation.gif)
-![](https://github.com/svelezg/linear_transforms/3D_animations/3D_animation00.gif)
+![](https://github.com/svelezg/linear_transforms/blob/master3D_animations/3D_animation.gif)
+![](https://github.com/svelezg/linear_transforms/blob/master3D_animations/3D_animation00.gif)
