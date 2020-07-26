@@ -24,7 +24,7 @@ def colorizer(x, y, z):
     return r, g, b
 
 
-def stepwise_transform(A, points, nsteps=50):
+def stepwise_transform(A, vectors, grid, nsteps=50):
     """
     Generate a series of intermediate transform for the matrix multiplication
     :param A: 2-by-2 matrix
@@ -33,7 +33,8 @@ def stepwise_transform(A, points, nsteps=50):
     :return: (nsteps + 1)-by-2-by-n array
     """
     # create empty array of the right size
-    transgrid = np.zeros((nsteps + 1,) + np.shape(points))
+    transgrid = np.zeros((nsteps + 1,) + np.shape(grid))
+    transvector = np.zeros((nsteps + 1,) + np.shape(vectors))
 
     # compute intermediate transforms
     for j in range(nsteps + 1):
@@ -42,20 +43,36 @@ def stepwise_transform(A, points, nsteps=50):
         intermediate = Iden + fact * (A - Iden)
 
         # apply intermediate matrix transformation
-        transgrid[j] = np.matmul(intermediate, points)
+        transgrid[j] = np.matmul(intermediate, grid)
+        transvector[j] = np.matmul(intermediate, vectors)
 
-    return transgrid
-
-
-def static_plot(array, colors):
-    with plt.xkcd():
-        fig = plt.figure(figsize=(4, 4), facecolor="w")
-        ax = fig.add_subplot(111, projection='3d')
-        ax.scatter(array[0], array[1], array[2], s=32, c=colors)
-        plt.show()
+    return transgrid, transvector
 
 
-def intermediate_plots(transarray, colors, outdir="png-frames", figuredpi=150):
+def static_plot(array, vectors, colors):
+    origin = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    X, Y, Z = zip(*origin)
+
+    U, V, W = zip(*vectors.T)
+    color = ['red', 'green', 'blue', 'yellow',
+             'red', 'red',
+             'green', 'green',
+             'blue', 'blue',
+             'yellow', 'yellow']
+
+    fig = plt.figure(figsize=(4, 4), facecolor="w")
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(array[0], array[1], array[2], s=2, c=colors)
+    ax.quiver(X, Y, Z, U, V, W, color=color)
+    fig.set_facecolor('black')
+    ax.set_facecolor('black')
+    ax.w_xaxis.set_pane_color((0.0, 0.0, 0.0, 0.0))
+    ax.w_yaxis.set_pane_color((0.0, 0.0, 0.0, 0.0))
+    ax.w_zaxis.set_pane_color((0.0, 0.0, 0.0, 0.0))
+    plt.show()
+
+
+def intermediate_plots(transarray, transvector, colors, outdir="png-frames", figuredpi=150):
     """
     Generate a series of png images showing a linear transformation stepwise
     :param transarray: array to plot
@@ -68,6 +85,15 @@ def intermediate_plots(transarray, colors, outdir="png-frames", figuredpi=150):
     ndigits = len(str(nsteps))  # to determine filename padding
     maxval = np.abs(transarray.max())  # to set axis limits
 
+    origin = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    X, Y, Z = zip(*origin)
+
+    color = ['red', 'green', 'blue', 'yellow',
+             'red', 'red',
+             'green', 'green',
+             'blue', 'blue',
+             'yellow', 'yellow']
+
     # create directory if necessary
     if not os.path.exists(outdir):
         os.makedirs(outdir)
@@ -76,6 +102,7 @@ def intermediate_plots(transarray, colors, outdir="png-frames", figuredpi=150):
     plt.ioff()
 
     for j in range(nsteps):  # plot individual frames
+        U, V, W = zip(*transvector[j].T)
         fig = plt.figure(figsize=(4, 4), facecolor="w")
 
         ax = fig.add_subplot(111, projection='3d')
@@ -84,6 +111,13 @@ def intermediate_plots(transarray, colors, outdir="png-frames", figuredpi=150):
                    transarray[j, 1],
                    transarray[j, 2],
                    s=4, c=colors)
+        ax.quiver(X, Y, Z, U, V, W, color=color)
+
+        fig.set_facecolor('black')
+        ax.set_facecolor('black')
+        ax.w_xaxis.set_pane_color((0.0, 0.0, 0.0, 0.0))
+        ax.w_yaxis.set_pane_color((0.0, 0.0, 0.0, 0.0))
+        ax.w_zaxis.set_pane_color((0.0, 0.0, 0.0, 0.0))
 
         ax.set_xlim(1.1 * np.array([-maxval, maxval]))
         ax.set_ylim(1.1 * np.array([-maxval, maxval]))
@@ -97,7 +131,6 @@ def intermediate_plots(transarray, colors, outdir="png-frames", figuredpi=150):
 
         plt.grid(True)
         plt.draw()
-
 
         # save as png
         outfile = os.path.join(outdir, "frame-" + str(j + 1).

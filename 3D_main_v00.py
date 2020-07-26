@@ -58,4 +58,4 @@ if __name__ == '__main__':
     if not os.path.exists('3D_animations'):
         os.makedirs('3D_animations')
 
-    os.system('convert -delay 10 3D_tmp/*.png 3D_animations/3D_animation00.gif')
+    os.system('convert -delay 10 3D_tmp/*.png 3D_animations/3D_animation.gif')

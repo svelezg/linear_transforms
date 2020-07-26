@@ -17,8 +17,22 @@ Here are some of the results, enjoy!!
 <img src="https://github.com/svelezg/linear_transforms/blob/master/3D_animations/3D_animation.gif" width="250" height="250"/>  |  <img src="https://github.com/svelezg/linear_transforms/blob/master/3D_animations/3D_animation00.gif" width="250" height="250"/>
 
 
+## Files
+The files to be executed are:
+### 2D
+- 2D_main_v00.py
+- 2D_main_v01.py
+- 2D_transformations.py
+- 2D_visualization_v01.py
+- 2D_visualization_v00.py
 
+### 3D
+- 3D_main_v00.py
+- 3D_main_v01.py
+- 3D_visualization_v01.py
+- 3D_visualization_v00.py
 
-
-
-
+The main files are the code entry point
+The visualization files contain the auxiliary function called by main
+In v01 besides the grid, base vectors (i j or i, j, k ) together with an eigenvector are plotted
+ 
